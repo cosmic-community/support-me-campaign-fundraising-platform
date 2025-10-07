@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { stripe } from '@/lib/stripe'
+import { getStripe } from '@/lib/stripe'
 import { getSupportTierById } from '@/lib/cosmic'
 
 export async function POST(request: NextRequest) {
@@ -23,6 +23,9 @@ export async function POST(request: NextRequest) {
         { status: 404 }
       )
     }
+
+    // Get Stripe instance (lazy initialization)
+    const stripe = getStripe()
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
